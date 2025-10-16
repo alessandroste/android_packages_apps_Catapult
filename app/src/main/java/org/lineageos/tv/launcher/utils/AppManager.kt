@@ -9,12 +9,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.ApplicationInfo.FLAG_SYSTEM
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import org.lineageos.tv.launcher.ext.favoriteApps
 import org.lineageos.tv.launcher.model.LeanbackAppInfo
-
-import com.android.settingslib.Utils as SettingsLibUtils
+//import com.android.settingslib.Utils as SettingsLibUtils
 
 object AppManager {
     fun updateFavoriteApps(context: Context, installedApps: List<LeanbackAppInfo>) {
@@ -55,17 +54,18 @@ object AppManager {
     }
 
     fun uninstallApp(context: Context, packageName: String) {
-        val packageUri = Uri.parse("package:$packageName")
+        val packageUri = "package:$packageName".toUri()
         val uninstallIntent = Intent(Intent.ACTION_DELETE, packageUri)
         context.startActivity(uninstallIntent, null)
     }
 
     fun uninstallable(app: ApplicationInfo, context: Context): Boolean {
-        return !isSystemApp(context) && !app.isSignedWithPlatformKey && !SettingsLibUtils.isEssentialPackage(
-            context.resources,
-            context.packageManager,
-            app.packageName
-        )
+        return !isSystemApp(context)
+//        return !isSystemApp(context) && !app.isSignedWithPlatformKey && !SettingsLibUtils.isEssentialPackage(
+//            context.resources,
+//            context.packageManager,
+//            app.packageName
+//        )
     }
 
     fun isSystemApp(context: Context): Boolean {
